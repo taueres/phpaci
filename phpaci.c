@@ -61,7 +61,7 @@ static sapi_module_struct phpaci_sapi_module = {
     NULL,   /* read POST data */
     sapi_phpaci_read_cookies, /* read Cookies */
     sapi_phpaci_register_variables, /* register server variables */
-    sapi_phpaci_log_messages, /* Log message */
+    sapi_phpaci_log_message, /* Log message */
     NULL,   /* Get request time */
     NULL,   /* Child terminate */
     STANDARD_SAPI_MODULE_PROPERTIES
@@ -71,4 +71,5 @@ int main(int argc, char *argv[])
 {
     sapi_module_struct *sapi_module = &phpaci_sapi_module;
     sapi_startup(sapi_module);
+    return SUCCESS;
 }

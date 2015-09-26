@@ -1,9 +1,10 @@
-phpaci: $(BUILD_BINARY)
-	
-$(BUILD_BINARY): $(PHP_GLOBAL_OBJS) $(PHP_BINARY_OBJS) $(PHP_PHPACI_OBJS)
+phpaci: $(SAPI_PHPACI_PATH)
+
+$(SAPI_PHPACI_PATH): $(PHP_GLOBAL_OBJS) $(PHP_BINARY_OBJS) $(PHP_PHPACI_OBJS)
 	$(BUILD_PHPACI)
 
-install-phpaci: $(BUILD_BINARY)
-	@echo "Installing PHP ACI binary: $(INSTALL_ROOT)$(bindir)"
+install-phpaci: $(SAPI_PHPACI_PATH)
+	@echo "Installing PHP PHPACI binary:        $(INSTALL_ROOT)$(bindir)/"
 	@$(mkinstalldirs) $(INSTALL_ROOT)$(bindir)
-	@$(INSTALL) -m 0755 $(BUILD_BINARY) $(INSTALL_ROOT)$(bindir)/$(program_prefix)php$(program_suffix)$(EXEEXT)
+	@$(INSTALL) -m 0755 $(SAPI_PHPACI_PATH) $(INSTALL_ROOT)$(bindir)/$(program_prefix)php$(program_suffix)$(EXEEXT)
+
