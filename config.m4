@@ -3,7 +3,6 @@ PHP_ARG_ENABLE(phpaci,,
 
 AC_MSG_CHECKING(for PHPACI build)
 if test "$PHP_PHPACI" != "no"; then
-echo "RENZO QUI"
   PHP_ADD_MAKEFILE_FRAGMENT($abs_srcdir/sapi/phpaci/Makefile.frag)
 
   dnl Set filename
