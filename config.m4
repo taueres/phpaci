@@ -1,5 +1,5 @@
 PHP_ARG_ENABLE(phpaci,,
-[  --enable-aci           Enable building PHPACI])
+[  --enable-aci           Enable building PHPACI ], yes)
 
 AC_MSG_CHECKING(for PHPACI build)
 if test "$PHP_PHPACI" != "no"; then

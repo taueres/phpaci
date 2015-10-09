@@ -2,6 +2,9 @@
 #include "SAPI.h"
 #include "php_main.h"
 
+#include "zend_language_scanner.h"
+#include "zend_language_parser.h"
+
 static int phpaci_startup(sapi_module_struct *sapi_module) /* {{{ */
 {
 	if (php_module_startup(sapi_module, NULL, 0)==FAILURE) {
@@ -77,15 +80,28 @@ static sapi_module_struct phpaci_sapi_module = {
 };
 /* }}} */
 
+void get_ast() /* {{{ */
+{
+	zval source;
+	zend_string *code = zend_string_init("<?php echo 'dummy php script that should just print this';", 4, 1);
+	zend_lex_state original_lex_state;
+	zend_bool original_in_compilation;
+
+	ZVAL_STR_COPY(&source, code);
+	original_in_compilation = CG(in_compilation);
+	CG(in_compilation) = 1;
+	zend_save_lexical_state(&original_lex_state);
+
+	if (zend_prepare_string_for_scanning(&source, "") == FAILURE) {
+	}
+}
+/* }}} */
+
 int main(int argc, char *argv[]) /* {{{ */
 {
-#ifdef ZTS
-	tsrm_startup(1, 1, 0, NULL);
-	(void)ts_resource(0);
-	ZEND_TSRMLS_CACHE_UPDATE();
-#endif
 	sapi_module_struct *sapi_module = &phpaci_sapi_module;
 	sapi_startup(sapi_module);
+	get_ast();
 	return SUCCESS;
 }
 /* }}} */
