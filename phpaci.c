@@ -86,6 +86,7 @@ void get_ast() /* {{{ */
 	zend_string *code = zend_string_init("<?php echo 'dummy php script that should just print this';", 4, 1);
 	zend_lex_state original_lex_state;
 	zend_bool original_in_compilation;
+	int parse_result;
 
 	ZVAL_STR_COPY(&source, code);
 	original_in_compilation = CG(in_compilation);
@@ -93,15 +94,32 @@ void get_ast() /* {{{ */
 	zend_save_lexical_state(&original_lex_state);
 
 	if (zend_prepare_string_for_scanning(&source, "") == FAILURE) {
+		// do something on failure
 	}
+	CG(ast) = NULL;
+	CG(ast_arena) = zend_arena_create(1024 * 32);
+	parse_result = zendparse();
 }
 /* }}} */
 
 int main(int argc, char *argv[]) /* {{{ */
 {
+#ifdef ZTS
+	tsrm_startup(1, 1, 0, NULL);
+	(void)ts_resource(0);
+	ZEND_TSRMLS_CACHE_UPDATE();
+#endif
+
+#ifdef ZEND_SIGNALS
+	zend_signal_startup();
+#endif
 	sapi_module_struct *sapi_module = &phpaci_sapi_module;
 	sapi_startup(sapi_module);
 	get_ast();
+
+#ifdef ZTS
+	tsrm_shutdown();
+#endif
 	return SUCCESS;
 }
 /* }}} */
